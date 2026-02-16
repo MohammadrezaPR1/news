@@ -45,13 +45,13 @@ app.use("/.netlify/functions/index", sendEmailRoutes);
 
 // For local development
 if (process.env.NODE_ENV !== "production") {
-    await connectDB();
+    connectDB();
     app.listen(5000, () => {
         console.log("Server running on port 5000 !");
     });
 } else {
     // Connect to DB once when function is initialized
-    await connectDB();
+    connectDB();
 }
 
 export const handler = serverless(app);

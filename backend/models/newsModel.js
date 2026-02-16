@@ -3,70 +3,70 @@ import db from "../config/Database.js";
 import Users from "./userModel.js";
 import Category from "./categoryModel.js"
 
-const{DataTypes} = Sequelize;
+const { DataTypes } = Sequelize;
 
-const News = await db.define("news",{
-    userId :{
-        type:DataTypes.INTEGER,
-        allowNull:false,
+const News = db.define("news", {
+    userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
     },
-    catId:{
-        type:DataTypes.INTEGER,
-        allowNull:false,
+    catId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
     },
-    title :{
-        type:DataTypes.STRING,
-        allowNull:false,
+    title: {
+        type: DataTypes.STRING,
+        allowNull: false,
     },
-    description :{
-        type:DataTypes.TEXT,
-        allowNull:false,
+    description: {
+        type: DataTypes.TEXT,
+        allowNull: false,
     },
-    subTitle1 :{
-        type:DataTypes.STRING,
-        allowNull:true,
+    subTitle1: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
-    subDescription1 :{
-        type:DataTypes.TEXT,
-        allowNull:true,
+    subDescription1: {
+        type: DataTypes.TEXT,
+        allowNull: true,
     },
-    subTitle2 :{
-        type:DataTypes.STRING,
-        allowNull:true,
+    subTitle2: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
-    subDescription2 :{
-        type:DataTypes.TEXT,
-        allowNull:true,
+    subDescription2: {
+        type: DataTypes.TEXT,
+        allowNull: true,
     },
-     subTitle3 :{
-        type:DataTypes.STRING,
-        allowNull:true,
+    subTitle3: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
-    subDescription3 :{
-        type:DataTypes.TEXT,
-        allowNull:true,
+    subDescription3: {
+        type: DataTypes.TEXT,
+        allowNull: true,
     },
-     subTitle4 :{
-        type:DataTypes.STRING,
-        allowNull:true,
+    subTitle4: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
-    subDescription4 :{
-        type:DataTypes.TEXT,
-        allowNull:true,
+    subDescription4: {
+        type: DataTypes.TEXT,
+        allowNull: true,
     },
-    numViews :{
-        type:DataTypes.INTEGER,
-        defaultValue:0,
+    numViews: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
     },
-    numLike:{
-        type:DataTypes.INTEGER,
-        defaultValue:0
+    numLike: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
     },
-    image :{
-        type:DataTypes.STRING,
+    image: {
+        type: DataTypes.STRING,
     },
-    url :{
-        type:DataTypes.STRING,
+    url: {
+        type: DataTypes.STRING,
     },
     images: {
         type: DataTypes.TEXT,
@@ -88,10 +88,10 @@ const News = await db.define("news",{
 
 
 Users.hasMany(News);
-News.belongsTo(Users,{foreignKey:"userId"});
+News.belongsTo(Users, { foreignKey: "userId" });
 
 Category.hasMany(News);
-News.belongsTo(Category,{foreignKey:"catId"})
+News.belongsTo(Category, { foreignKey: "catId" })
 
 
 export default News;
