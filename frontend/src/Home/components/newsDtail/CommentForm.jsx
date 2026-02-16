@@ -13,7 +13,7 @@ const formSchema = yup.object({
 })
 
 export default function CommentForm() {
-  const {createComment} = useContext(HomeContext)
+  const { createComment } = useContext(HomeContext)
   const { id } = useParams();
 
   const formik = useFormik({
@@ -25,7 +25,7 @@ export default function CommentForm() {
       newsId: id
     },
     onSubmit: (values) => {
-     createComment(values)
+      createComment(values)
     },
     validationSchema: formSchema,
   })
@@ -34,100 +34,88 @@ export default function CommentForm() {
 
   return (
 
-    < form
+    <form
       onSubmit={formik.handleSubmit}
-      className="mt-6 bg-white p-6 rounded-2xl shadow-md border border-gray-100 space-y-4 text-right"
+      className="mt-12 bg-white p-8 md:p-10 rounded-[32px] shadow-sm border border-slate-100 space-y-8 text-right relative overflow-hidden"
     >
-      <h2 className="text-xl font-bold text-gray-800 border-b pb-2">
-        ارسال نظر
-      </h2>
+      <div className="absolute top-0 right-0 w-full h-1 bg-gradient-to-l from-indigo-500 to-transparent opacity-50" />
 
-      {/* Name & Email in one row */}
-      <div className="flex gap-4" >
+      <div className="flex flex-col gap-2">
+        <h2 className="text-2xl font-black text-slate-800">دیدگاه شما</h2>
+        <p className="text-slate-400 text-sm font-bold">نظرات شما پس از تایید مدیریت منتشر خواهد شد</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Name */}
-        < div className="flex-1" >
-          <label className="block text-sm font-medium text-gray-600 mb-1">
-            نام
-          </label>
+        <div className="space-y-2">
+          <label className="block text-sm font-black text-slate-700 mr-2">نام و نام خانوادگی</label>
           <input
             type="text"
             name="name"
             value={formik.values.name}
-            onChange={formik.handleChange("name")}
-            onBlur={formik.handleBlur("name")}
-            className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 outline-none text-right placeholder:text-right"
-            placeholder="نام خود را وارد کنید"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            className={`w-full bg-slate-50 border-2 rounded-2xl px-5 py-3.5 focus:bg-white transition-all outline-none font-bold text-slate-700 placeholder:text-slate-300 placeholder:text-right ${formik.touched.name && formik.errors.name ? 'border-red-100 focus:border-red-200' : 'border-slate-50 focus:border-indigo-100'}`}
+            placeholder="مثال: محمد رضا"
           />
-            <p className="text-red-700">
-            {formik.touched.name && formik.errors.name}
-          </p>
+          {formik.touched.name && formik.errors.name && <p className="text-[10px] font-black text-red-500 mr-2 uppercase tracking-tighter">! {formik.errors.name}</p>}
         </div>
 
         {/* Email */}
-        < div className="flex-1" >
-          <label className="block text-sm font-medium text-gray-600 mb-1">
-            ایمیل
-          </label>
+        <div className="space-y-2">
+          <label className="block text-sm font-black text-slate-700 mr-2">آدرس ایمیل</label>
           <input
             type="email"
             name="email"
             value={formik.values.email}
-            onChange={formik.handleChange("email")}
-            onBlur={formik.handleBlur("email")}
-            className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 outline-none text-right placeholder:text-right"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            className={`w-full bg-slate-50 border-2 rounded-2xl px-5 py-3.5 focus:bg-white transition-all outline-none font-bold text-slate-700 placeholder:text-slate-300 placeholder:text-right ${formik.touched.email && formik.errors.email ? 'border-red-100 focus:border-red-200' : 'border-slate-50 focus:border-indigo-100'}`}
             placeholder="example@email.com"
           />
-            <p className="text-red-700">
-            {formik.touched.email && formik.errors.email}
-          </p>
-        </div >
-      </div >
+          {formik.touched.email && formik.errors.email && <p className="text-[10px] font-black text-red-500 mr-2 uppercase tracking-tighter">! {formik.errors.email}</p>}
+        </div>
+      </div>
 
       {/* Subject */}
-      < div >
-        <label className="block text-sm font-medium text-gray-600 mb-1">
-          موضوع
-        </label>
+      <div className="space-y-2">
+        <label className="block text-sm font-black text-slate-700 mr-2">موضوع دیدگاه</label>
         <input
           type="text"
           name="subject"
           value={formik.values.subject}
-          onChange={formik.handleChange("subject")}
-          onBlur={formik.handleBlur("subject")}
-          className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 outline-none text-right placeholder:text-right"
-          placeholder="موضوع نظر خود را وارد کنید"
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          className={`w-full bg-slate-50 border-2 rounded-2xl px-5 py-3.5 focus:bg-white transition-all outline-none font-bold text-slate-700 placeholder:text-slate-300 placeholder:text-right ${formik.touched.subject && formik.errors.subject ? 'border-red-100 focus:border-red-200' : 'border-slate-50 focus:border-indigo-100'}`}
+          placeholder="موضوع نظر خود را بنویسید..."
         />
-          <p className="text-red-700">
-            {formik.touched.subject && formik.errors.subject}
-          </p>
-      </div >
+        {formik.touched.subject && formik.errors.subject && <p className="text-[10px] font-black text-red-500 mr-2 uppercase tracking-tighter">! {formik.errors.subject}</p>}
+      </div>
 
       {/* Comment */}
-      < div >
-        <label className="block text-sm font-medium text-gray-600 mb-1">
-          متن نظر
-        </label>
+      <div className="space-y-2">
+        <label className="block text-sm font-black text-slate-700 mr-2">متن پیام</label>
         <textarea
-          name="comment"
+          name="description"
           value={formik.values.description}
-          onChange={formik.handleChange("description")}
-          onBlur={formik.handleBlur("description")}
-          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none text-right placeholder:text-right"
-          rows="4"
-          placeholder="نظر خود را بنویسید..."
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          className={`w-full bg-slate-50 border-2 rounded-2xl px-6 py-4 focus:bg-white transition-all outline-none font-medium text-slate-700 leading-loose placeholder:text-slate-300 placeholder:text-right ${formik.touched.description && formik.errors.description ? 'border-red-100 focus:border-red-200' : 'border-slate-50 focus:border-indigo-100'}`}
+          rows="6"
+          placeholder="دیدگاه خود را با جزئیات وارد کنید..."
         ></textarea>
-          <p className="text-red-700">
-            {formik.touched.description && formik.errors.description}
-          </p>
-      </div >
+        {formik.touched.description && formik.errors.description && <p className="text-[10px] font-black text-red-500 mr-2 uppercase tracking-tighter">! {formik.errors.description}</p>}
+      </div>
 
       {/* Submit */}
-      < button
-        type="submit"
-        className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all font-medium shadow-sm"
-      >
-        ارسال نظر
-      </button >
-    </form >
+      <div className="pt-2">
+        <button
+          type="submit"
+          className="w-full md:w-fit min-w-[200px] py-4 px-10 bg-slate-900 text-white rounded-2xl hover:bg-indigo-600 transition-all font-black text-sm shadow-xl shadow-slate-100 active:scale-95"
+        >
+          ثبت و ارسال دیدگاه
+        </button>
+      </div>
+    </form>
   );
 }

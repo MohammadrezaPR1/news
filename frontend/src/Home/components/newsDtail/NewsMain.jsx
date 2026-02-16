@@ -104,7 +104,7 @@ export default function NewsMain({ data }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        <p className="leading-9 text-gray-800 text-justify text-lg mb-6">
+        <p className="leading-9 text-gray-800 text-justify text-lg mb-6 whitespace-pre-wrap">
           {data.description}
         </p>
       </motion.div>

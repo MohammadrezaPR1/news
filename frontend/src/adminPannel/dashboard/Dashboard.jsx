@@ -89,32 +89,27 @@ export default function Dashboard({ children }) {
 
         {/* Content Wrapper */}
         <main
-          className="flex-1 transition-all duration-300"
-          style={{
-            marginRight: isMobile ? 0 : sidebarWidth,
-            paddingTop: "64px", // TopBar height
-          }}
+          className={`flex-1 transition-all duration-300 min-w-0 ${isMobile ? 'mr-0' : (sidebarOpen ? 'mr-[260px]' : 'mr-[80px]')} pt-16`}
           dir="rtl"
         >
-          <div className="p-4 md:p-8 max-w-[1600px] mx-auto">
-
+          <div className="p-4 md:p-8 max-w-[1600px] mx-auto w-full">
             {/* Page Header */}
-            <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div className="mb-6 md:mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
-                <h1 className="text-3xl font-black text-slate-900 mb-2">داشبورد مدیریت</h1>
-                <p className="text-slate-500 font-bold text-sm flex items-center gap-2">
+                <h1 className="text-2xl md:text-3xl font-black text-slate-900 mb-2">داشبورد مدیریت</h1>
+                <p className="text-slate-500 font-bold text-xs md:text-sm flex items-center gap-2">
                   <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
                   در حال حاضر {userList?.length} مدیر بر روی سیستم فعال هستند
                 </p>
               </div>
-              <div className="flex gap-2 text-[11px] font-black text-slate-400 uppercase tracking-widest bg-white px-4 py-2 rounded-xl shadow-sm border border-slate-100 italic-none">
+              <div className="hidden md:flex gap-2 text-[11px] font-black text-slate-400 uppercase tracking-widest bg-white px-4 py-2 rounded-xl shadow-sm border border-slate-100 italic-none">
                 {new Date().toLocaleDateString('fa-IR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
               </div>
             </div>
 
             {/* Quick Stats Grid */}
-            <section className="mb-12">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+            <section className="mb-8 md:mb-12">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 md:gap-6">
                 {cards.map((card, index) => (
                   <Card
                     key={index}
@@ -129,10 +124,10 @@ export default function Dashboard({ children }) {
 
             {/* Content Slot with Fade In */}
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="bg-white rounded-[32px] shadow-sm border border-slate-200/60 p-6 md:p-10 min-h-[400px]"
+              transition={{ duration: 0.3 }}
+              className="bg-white rounded-2xl md:rounded-[32px] shadow-sm border border-slate-200/60 p-4 md:p-10 min-h-[400px]"
             >
               {children}
             </motion.div>

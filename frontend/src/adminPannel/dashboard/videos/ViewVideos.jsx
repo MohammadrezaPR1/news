@@ -69,8 +69,8 @@ const ViewVideos = () => {
           </div>
         </div>
 
-        {/* Table Container */}
-        <div className="bg-white rounded-[32px] overflow-hidden border border-slate-100 shadow-sm">
+        {/* Desktop Table View */}
+        <div className="hidden lg:block bg-white rounded-[32px] overflow-hidden border border-slate-100 shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-right border-collapse">
               <thead>
@@ -133,20 +133,67 @@ const ViewVideos = () => {
                       </div>
                     </td>
                   </tr>
-                )) : (
-                  <tr>
-                    <td colSpan="5" className="p-20 text-center">
-                      <div className="flex flex-col items-center gap-4">
-                        <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-200"><FiVideo size={32} /></div>
-                        <p className="text-slate-400 font-bold">هیچ ویدیویی یافت نشد.</p>
-                      </div>
-                    </td>
-                  </tr>
-                )}
+                )) : null}
               </tbody>
             </table>
           </div>
         </div>
+
+        {/* Mobile Card View */}
+        <div className="lg:hidden space-y-4">
+          {filteredVideos.length > 0 ? filteredVideos.map((video, index) => (
+            <div key={video?.id || index} className="bg-white p-5 rounded-[24px] border border-slate-100 shadow-sm space-y-5">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-12 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-500 shrink-0 shadow-inner">
+                  <FiVideo size={24} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-black text-slate-800 text-sm truncate">{video?.title || "بدون عنوان"}</h3>
+                  <div className="flex items-center gap-2 mt-1">
+                    <FiClock size={10} className="text-slate-300" />
+                    <span className="text-[10px] font-bold text-slate-400">{new Date(video.createdAt).toLocaleDateString("fa-IR")}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between pt-5 border-t border-slate-50">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setPreviewVideo(video)}
+                    className="flex items-center gap-2 bg-slate-50 text-slate-500 px-4 py-2 rounded-xl text-[10px] font-black hover:bg-indigo-50 hover:text-indigo-600 transition-all"
+                  >
+                    <FiEye size={14} />
+                    پیش‌نمایش
+                  </button>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Link
+                    to={`/admin-edit-video/${video?.id}`}
+                    state={video}
+                    className="w-10 h-10 flex items-center justify-center rounded-xl bg-amber-50 text-amber-500 active:scale-90 transition-all"
+                  >
+                    <FiEdit size={18} />
+                  </Link>
+                  <button
+                    onClick={() => handleDeleteClick(video)}
+                    className="w-10 h-10 flex items-center justify-center rounded-xl bg-rose-50 text-rose-500 active:scale-90 transition-all"
+                  >
+                    <FiTrash2 size={18} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          )) : null}
+        </div>
+
+        {filteredVideos.length === 0 && (
+          <div className="p-20 text-center bg-white rounded-[32px] border border-slate-100 shadow-sm">
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-200"><FiVideo size={32} /></div>
+              <p className="text-slate-400 font-bold">هیچ ویدیویی یافت نشد.</p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Video Preview Modal */}

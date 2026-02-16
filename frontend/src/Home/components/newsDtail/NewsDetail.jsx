@@ -84,16 +84,16 @@ export default function NewsDetail() {
   return (
     <>
       <Navbar />
-      <div className="flex justify-center bg-gray-50 min-h-screen p-4">
+      <div className="flex justify-center bg-[#fdfdfd] min-h-screen p-4 md:pt-12">
         {/* بخش اشتراک‌گذاری در دسکتاپ */}
-        <div className="hidden lg:flex flex-col gap-3 w-16 items-center bg-white rounded-xl shadow-lg border border-gray-200 p-3 h-fit sticky top-24">
+        <div className="hidden lg:flex flex-col gap-4 w-14 items-center bg-white rounded-2xl shadow-sm border border-slate-100 p-3 h-fit sticky top-28">
           {shareButtons.map((btn, i) => (
             <a
               key={i}
               href={btn.link}
               target="_blank"
               rel="noopener noreferrer"
-              className={`${btn.color} text-white p-3 rounded-full hover:scale-110 transition-transform`}
+              className={`${btn.color} text-white p-2.5 rounded-xl hover:scale-110 transition-transform shadow-sm`}
             >
               {btn.icon}
             </a>
@@ -101,41 +101,49 @@ export default function NewsDetail() {
         </div>
 
         {/* بخش اصلی خبر */}
-        <div className="w-full lg:w-3/5 bg-white shadow-xl rounded-2xl overflow-hidden p-6 border border-gray-200 relative">
+        <div className="w-full lg:w-3/5 lg:mx-8 bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[40px] overflow-hidden p-6 md:p-12 border border-slate-50 relative">
           <NewsMain data={state} />
 
           {/* بخش لایک خبر */}
-          <div className="mt-6 mb-6 text-center bg-gray-100 rounded-xl p-4 shadow-sm border border-gray-200 relative">
-            <p className="text-gray-700 text-lg font-medium mb-3">
-              آیا این خبر را دوست داشتید؟
-            </p>
+          <div className="mt-12 mb-12 text-center bg-slate-50 rounded-[32px] p-8 border border-slate-100">
+            <h3 className="text-slate-800 text-xl font-black mb-2">
+              این مطلب برای شما مفید بود؟
+            </h3>
+            <p className="text-slate-400 text-sm font-bold mb-6">با لایک خود از نویسنده حمایت کنید</p>
             <button
               onClick={handleLike}
               disabled={isLiked}
-              className={`flex items-center justify-center gap-2 mx-auto px-6 py-3 rounded-full shadow-md text-white transition-all duration-300 ${isLiked ? "bg-red-500 scale-105" : "bg-red-400 hover:bg-red-500"
+              className={`flex items-center justify-center gap-3 mx-auto px-10 py-4 rounded-2xl font-black transition-all duration-300 shadow-xl active:scale-95 ${isLiked ? "bg-green-500 text-white shadow-green-100" : "bg-white text-red-500 hover:bg-red-50 shadow-slate-100"
                 }`}
             >
-              <FaHeart className={`text-xl ${isLiked ? "animate-pulse" : ""}`} />
-              {isLiked ? "شما لایک کردید" : "لایک"}
+              <FaHeart className={`text-xl ${isLiked ? "" : ""}`} />
+              {isLiked ? "پسندیده شد" : "لایک این خبر"}
             </button>
           </div>
 
           {/* دکمه‌های اشتراک گذاری در موبایل */}
-          <div className="flex lg:hidden justify-center gap-4 mt-6">
-            {shareButtons.map((btn, i) => (
-              <a
-                key={i}
-                href={btn.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${btn.color} text-white p-3 rounded-full hover:scale-110 transition-transform`}
-              >
-                {btn.icon}
-              </a>
-            ))}
+          <div className="lg:hidden">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="h-px bg-slate-100 flex-1"></div>
+              <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">اشتراک گذاری</span>
+              <div className="h-px bg-slate-100 flex-1"></div>
+            </div>
+            <div className="flex justify-center gap-4">
+              {shareButtons.map((btn, i) => (
+                <a
+                  key={i}
+                  href={btn.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${btn.color} text-white p-3.5 rounded-2xl hover:scale-110 transition-transform shadow-lg`}
+                >
+                  {btn.icon}
+                </a>
+              ))}
+            </div>
           </div>
 
-          <hr className="my-6 border-t-2 border-gray-200" />
+          <div className="my-14 h-px bg-gradient-to-r from-transparent via-slate-100 to-transparent" />
 
           {/* فرم و لیست نظرات */}
           <LastRelatedNews />
@@ -144,22 +152,27 @@ export default function NewsDetail() {
         </div>
 
         {/* تبلیغات سمت راست */}
-        <div className="hidden lg:flex flex-col gap-5 w-1/5 bg-white p-4 rounded-xl shadow-lg border border-gray-200 sticky top-24 h-fit">
-          {banners.map((ad, i) => (
-            <a
-              key={i}
-              href="#"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition-transform duration-300 hover:scale-105"
-            >
-              <img
-                src={ad}
-                alt={`banner-${i + 1}`}
-                className="rounded-lg shadow-md border border-gray-200 w-full"
-              />
-            </a>
-          ))}
+        <div className="hidden lg:flex flex-col gap-6 w-1/5 sticky top-28 h-fit">
+          <div className="bg-white p-5 rounded-[32px] shadow-sm border border-slate-100">
+            <h4 className="text-[10px] font-black text-slate-300 mb-4 uppercase tracking-[0.2em] text-center">تبلیغات پیشنهادی</h4>
+            <div className="space-y-4">
+              {banners.map((ad, i) => (
+                <a
+                  key={i}
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block transition-all duration-300 hover:-translate-y-1"
+                >
+                  <img
+                    src={ad}
+                    alt={`banner-${i + 1}`}
+                    className="rounded-2xl shadow-sm border border-slate-50 w-full"
+                  />
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
       <Footer />

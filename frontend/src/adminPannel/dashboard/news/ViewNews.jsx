@@ -40,12 +40,12 @@ const ViewNews = () => {
     <Dashboard>
       <div dir="rtl">
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
-          <div className="flex items-center gap-4 bg-white px-4 py-2 rounded-2xl shadow-sm border border-slate-100 flex-1 max-w-md">
-            <FiSearch className="text-slate-400" size={20} />
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 md:mb-10">
+          <div className="flex items-center gap-3 bg-white px-4 py-3 rounded-2xl shadow-sm border border-slate-100 flex-1 max-w-full md:max-w-md">
+            <FiSearch className="text-slate-400" size={18} />
             <input
               type="text"
-              placeholder="جستجو در بین اخبار مدیریت شده..."
+              placeholder="جستجو در اخبار..."
               className="bg-transparent border-none focus:ring-0 w-full text-sm font-bold text-slate-700 placeholder:text-slate-300"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -54,35 +54,34 @@ const ViewNews = () => {
 
           <Link
             to="/admin-add-news"
-            className="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3.5 rounded-2xl font-black text-sm shadow-xl shadow-indigo-100 transition-all hover:-translate-y-0.5"
+            className="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3.5 rounded-2xl font-black text-sm shadow-lg shadow-indigo-100 transition-all active:scale-95"
           >
             <FiPlus size={20} />
-            <span>انتشار خبر جدید</span>
+            <span>خبر جدید</span>
           </Link>
         </div>
 
-        {/* Table Container */}
-        <div className="bg-white rounded-[32px] overflow-hidden border border-slate-100 shadow-sm">
+        {/* Desktop Table View */}
+        <div className="hidden lg:block bg-white rounded-[32px] overflow-hidden border border-slate-100 shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-right border-collapse">
               <thead>
                 <tr className="bg-slate-50/50 border-b border-slate-100">
                   <th className="p-6 text-xs font-black text-slate-400 uppercase tracking-widest">تصویر و عنوان</th>
                   <th className="p-6 text-xs font-black text-slate-400 uppercase tracking-widest">نویسنده</th>
-                  <th className="p-6 text-xs font-black text-slate-400 uppercase tracking-widest">تاریخ انتشار</th>
-                  <th className="p-6 text-xs font-black text-slate-400 uppercase tracking-widest">وضعیت</th>
+                  <th className="p-6 text-xs font-black text-slate-400 uppercase tracking-widest">تاریخ</th>
                   <th className="p-6 text-xs font-black text-slate-400 uppercase tracking-widest text-left">عملیات</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50">
-                {filteredNews.map((item, index) => (
+                {filteredNews.map((item) => (
                   <tr key={item.id} className="hover:bg-slate-50/50 transition-colors group">
                     <td className="p-4">
                       <div className="flex items-center gap-4">
                         <div className="w-16 h-16 rounded-2xl overflow-hidden shadow-sm border border-slate-100 shrink-0">
-                          <img src={item.url} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                          <img src={item.url} alt="" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                         </div>
-                        <div className="max-w-xs transition-colors group-hover:text-indigo-600">
+                        <div className="max-w-xs">
                           <p className="font-black text-sm text-slate-800 line-clamp-2 leading-snug">{item.title}</p>
                           <span className="text-[10px] font-bold text-indigo-500 mt-1 inline-block uppercase bg-indigo-50 px-2 py-0.5 rounded-md">
                             {item.category?.name || "بدون دسته"}
@@ -90,46 +89,13 @@ const ViewNews = () => {
                         </div>
                       </div>
                     </td>
-                    <td className="p-4">
-                      <div className="flex items-center gap-2 text-slate-600">
-                        <div className="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center">
-                          <FiUser size={14} className="text-slate-400" />
-                        </div>
-                        <span className="text-xs font-bold">{item?.user?.name || "نامشخص"}</span>
-                      </div>
-                    </td>
-                    <td className="p-4">
-                      <div className="flex items-center gap-2 text-slate-400">
-                        <FiClock size={14} />
-                        <span className="text-[11px] font-bold tracking-tighter">
-                          {new Date(item.createdAt).toLocaleDateString("fa-IR")}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="p-4">
-                      <span className="px-3 py-1 bg-green-50 text-green-600 rounded-full text-[10px] font-black border border-green-100">منتشر شده</span>
-                    </td>
+                    <td className="p-4 text-xs font-bold text-slate-600">{item?.user?.name || "نامشخص"}</td>
+                    <td className="p-4 text-[11px] font-bold text-slate-400">{new Date(item.createdAt).toLocaleDateString("fa-IR")}</td>
                     <td className="p-4 text-left">
                       <div className="flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => setSelectedNews(item)}
-                          className="p-2.5 text-slate-400 hover:text-indigo-600 hover:bg-white rounded-xl transition-all shadow-sm hover:shadow-md border border-transparent hover:border-slate-100"
-                        >
-                          <FiEye size={18} />
-                        </button>
-                        <Link
-                          to={`/admin-edit-news/${item.id}`}
-                          state={item}
-                          className="p-2.5 text-slate-400 hover:text-amber-500 hover:bg-white rounded-xl transition-all shadow-sm hover:shadow-md border border-transparent hover:border-slate-100"
-                        >
-                          <FiEdit size={18} />
-                        </Link>
-                        <button
-                          onClick={() => handleDeleteClick(item)}
-                          className="p-2.5 text-slate-400 hover:text-red-500 hover:bg-white rounded-xl transition-all shadow-sm hover:shadow-md border border-transparent hover:border-slate-100"
-                        >
-                          <FiTrash2 size={18} />
-                        </button>
+                        <button onClick={() => setSelectedNews(item)} className="p-2 text-slate-400 hover:text-indigo-600 transition-colors"><FiEye size={18} /></button>
+                        <Link to={`/admin-edit-news/${item.id}`} state={item} className="p-2 text-slate-400 hover:text-amber-500 transition-colors"><FiEdit size={18} /></Link>
+                        <button onClick={() => handleDeleteClick(item)} className="p-2 text-slate-400 hover:text-red-500 transition-colors"><FiTrash2 size={18} /></button>
                       </div>
                     </td>
                   </tr>
@@ -137,15 +103,38 @@ const ViewNews = () => {
               </tbody>
             </table>
           </div>
-          {filteredNews.length === 0 && (
-            <div className="p-20 text-center">
-              <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-100">
-                <FiSearch size={32} className="text-slate-300" />
-              </div>
-              <p className="font-black text-slate-400">نتیجه‌ای یافت نشد...</p>
-            </div>
-          )}
         </div>
+
+        {/* Mobile Card View */}
+        <div className="lg:hidden space-y-4">
+          {filteredNews.map((item) => (
+            <div key={item.id} className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+              <div className="flex gap-4">
+                <img src={item.url} className="w-20 h-20 rounded-xl object-cover shrink-0 shadow-sm" alt="" />
+                <div className="flex-1 min-w-0">
+                  <span className="text-[10px] font-black text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded mb-1 inline-block">{item.category?.name}</span>
+                  <h3 className="font-black text-sm text-slate-800 leading-snug line-clamp-2">{item.title}</h3>
+                  <div className="flex items-center gap-3 mt-2 text-[10px] font-bold text-slate-400">
+                    <span className="flex items-center gap-1"><FiUser size={12} /> {item?.user?.name}</span>
+                    <span className="flex items-center gap-1"><FiClock size={12} /> {new Date(item.createdAt).toLocaleDateString("fa-IR")}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex gap-2 pt-3 border-t border-slate-50">
+                <button onClick={() => setSelectedNews(item)} className="flex-1 bg-slate-50 text-slate-600 py-2.5 rounded-xl font-black text-xs flex items-center justify-center gap-2"><FiEye /> مشاهده</button>
+                <Link to={`/admin-edit-news/${item.id}`} state={item} className="flex-1 bg-amber-50 text-amber-600 py-2.5 rounded-xl font-black text-xs flex items-center justify-center gap-2"><FiEdit /> ویرایش</Link>
+                <button onClick={() => handleDeleteClick(item)} className="w-12 bg-red-50 text-red-500 py-2.5 rounded-xl font-black flex items-center justify-center"><FiTrash2 /></button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {filteredNews.length === 0 && (
+          <div className="p-10 md:p-20 text-center">
+            <FiSearch size={32} className="text-slate-200 mx-auto mb-4" />
+            <p className="font-black text-slate-400 text-sm">نتیجه‌ای یافت نشد...</p>
+          </div>
+        )}
       </div>
 
       {/* Details Modal */}

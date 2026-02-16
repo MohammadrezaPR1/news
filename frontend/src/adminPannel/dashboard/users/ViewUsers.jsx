@@ -72,8 +72,8 @@ const ViewUsers = () => {
           </div>
         </div>
 
-        {/* Table Container */}
-        <div className="bg-white rounded-[32px] overflow-hidden border border-slate-100 shadow-sm">
+        {/* Desktop Table View */}
+        <div className="hidden lg:block bg-white rounded-[32px] overflow-hidden border border-slate-100 shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-right border-collapse">
               <thead>
@@ -104,7 +104,7 @@ const ViewUsers = () => {
 
                     <td className="p-6 text-center">
                       {user.isAdmin ? (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 text-rose-600 text-[10px] font-black uppercase tracking-tighter">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 text-white text-[10px] font-black uppercase tracking-tighter shadow-lg shadow-slate-100">
                           <FiShield size={12} />
                           مدیر ارشد
                         </span>
@@ -141,20 +141,66 @@ const ViewUsers = () => {
                       </div>
                     </td>
                   </tr>
-                )) : (
-                  <tr>
-                    <td colSpan="4" className="p-20 text-center">
-                      <div className="flex flex-col items-center gap-4">
-                        <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-200"><FiUser size={32} /></div>
-                        <p className="text-slate-400 font-bold">هیچ کاربری با این مشخصات یافت نشد.</p>
-                      </div>
-                    </td>
-                  </tr>
-                )}
+                )) : null}
               </tbody>
             </table>
           </div>
         </div>
+
+        {/* Mobile Card View */}
+        <div className="lg:hidden space-y-4">
+          {filteredUsers.length > 0 ? filteredUsers.map((user) => (
+            <div key={user.id} className="bg-white p-5 rounded-[24px] border border-slate-100 shadow-sm space-y-5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 font-black shadow-sm">
+                    {user.name?.charAt(0) || "U"}
+                  </div>
+                  <div>
+                    <h3 className="font-black text-slate-800 text-sm">{user.name}</h3>
+                    <p className="text-[10px] font-bold text-slate-400 mt-0.5">{user.email}</p>
+                  </div>
+                </div>
+                {user.isAdmin ? (
+                  <span className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-lg shadow-slate-100"><FiShield size={16} /></span>
+                ) : (
+                  <span className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center"><FiUser size={16} /></span>
+                )}
+              </div>
+
+              <div className="flex items-center justify-between pt-5 border-t border-slate-50">
+                <div className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">
+                  عضویت: {new Date(user.createdAt).toLocaleDateString("fa-IR")}
+                </div>
+                <div className="flex items-center gap-2">
+                  <Link
+                    to={`/admin-edit-user/${user.id}`}
+                    state={user}
+                    onClick={(e) => handleEditClick(e, user)}
+                    className={`w-11 h-11 flex items-center justify-center rounded-xl transition-all ${isAdmin ? 'text-amber-500 bg-amber-50 active:scale-90' : 'text-slate-200 bg-slate-50'}`}
+                  >
+                    <FiEdit size={18} />
+                  </Link>
+                  <button
+                    onClick={() => handleDeleteClick(user)}
+                    className={`w-11 h-11 flex items-center justify-center rounded-xl transition-all ${isAdmin ? 'text-rose-500 bg-rose-50 active:scale-90' : 'text-slate-200 bg-slate-50'}`}
+                  >
+                    <FiTrash2 size={18} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          )) : null}
+        </div>
+
+        {filteredUsers.length === 0 && (
+          <div className="p-20 text-center bg-white rounded-[32px] border border-slate-100 shadow-sm">
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-slate-300"><FiUser size={32} /></div>
+              <p className="text-slate-400 font-bold">هیچ کاربری یافت نشد.</p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Delete Confirmation Modal */}

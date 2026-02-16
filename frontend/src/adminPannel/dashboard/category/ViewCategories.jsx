@@ -63,8 +63,8 @@ const ViewCategories = () => {
           </div>
         </div>
 
-        {/* Table Container */}
-        <div className="bg-white rounded-[32px] overflow-hidden border border-slate-100 shadow-sm">
+        {/* Desktop Table View */}
+        <div className="hidden md:block bg-white rounded-[32px] overflow-hidden border border-slate-100 shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-right border-collapse">
               <thead>
@@ -103,20 +103,49 @@ const ViewCategories = () => {
                       </div>
                     </td>
                   </tr>
-                )) : (
-                  <tr>
-                    <td colSpan="3" className="p-20 text-center">
-                      <div className="flex flex-col items-center gap-4">
-                        <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-200"><FiGrid size={32} /></div>
-                        <p className="text-slate-400 font-bold">هیچ دسته‌بندی یافت نشد.</p>
-                      </div>
-                    </td>
-                  </tr>
-                )}
+                )) : null}
               </tbody>
             </table>
           </div>
         </div>
+
+        {/* Mobile Card View */}
+        <div className="md:hidden space-y-4">
+          {filteredCategories.length > 0 ? filteredCategories.map((item, index) => (
+            <div key={item.id || index} className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between group">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 font-black text-xs">
+                  {index + 1}
+                </div>
+                <span className="font-black text-slate-700">{item.name}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Link
+                  to={`/admin-edit-category/${item.id}`}
+                  state={item}
+                  className="w-10 h-10 flex items-center justify-center rounded-xl text-amber-500 bg-amber-50 active:scale-90 transition-all"
+                >
+                  <FiEdit size={16} />
+                </Link>
+                <button
+                  onClick={() => handleDeleteClick(item)}
+                  className="w-10 h-10 flex items-center justify-center rounded-xl text-rose-500 bg-rose-50 active:scale-90 transition-all"
+                >
+                  <FiTrash2 size={16} />
+                </button>
+              </div>
+            </div>
+          )) : null}
+        </div>
+
+        {filteredCategories.length === 0 && (
+          <div className="p-20 text-center bg-white rounded-[32px] border border-slate-100 shadow-sm">
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-200"><FiGrid size={32} /></div>
+              <p className="text-slate-400 font-bold">هیچ دسته‌بندی یافت نشد.</p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Delete Confirmation Modal */}

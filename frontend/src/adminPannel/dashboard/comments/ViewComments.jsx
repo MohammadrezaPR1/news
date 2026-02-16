@@ -73,8 +73,8 @@ const ViewComments = () => {
           </div>
         </div>
 
-        {/* Table Container */}
-        <div className="bg-white rounded-[32px] overflow-hidden border border-slate-100 shadow-sm">
+        {/* Desktop Table View */}
+        <div className="hidden lg:block bg-white rounded-[32px] overflow-hidden border border-slate-100 shadow-sm">
           <table className="w-full text-right border-collapse">
             <thead>
               <tr className="bg-slate-50/50 border-b border-slate-100">
@@ -145,19 +145,74 @@ const ViewComments = () => {
                     </div>
                   </td>
                 </tr>
-              )) : (
-                <tr>
-                  <td colSpan="4" className="p-20 text-center">
-                    <div className="flex flex-col items-center gap-4">
-                      <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-200"><FiMessageSquare size={32} /></div>
-                      <p className="text-slate-400 font-bold">هیچ نظری یافت نشد.</p>
-                    </div>
-                  </td>
-                </tr>
-              )}
+              )) : null}
             </tbody>
           </table>
         </div>
+
+        {/* Mobile Card View */}
+        <div className="lg:hidden space-y-4">
+          {filteredComments.length > 0 ? filteredComments.map((item) => (
+            <div key={item.id} className="bg-white p-5 rounded-[24px] border border-slate-100 shadow-sm space-y-5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 font-black shadow-sm">
+                    {item.name?.charAt(0) || "C"}
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="font-black text-slate-800 text-sm truncate">{item.name}</h3>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <FiClock size={10} className="text-slate-300" />
+                      <span className="text-[10px] font-bold text-slate-400">{new Date(item.createdAt).toLocaleDateString("fa-IR")}</span>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => handleToggleStatus(item.id, item.isActive)}
+                  className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all shadow-sm active:scale-90 ${item.isActive
+                    ? 'bg-emerald-50 text-emerald-600 border border-emerald-100'
+                    : 'bg-rose-50 text-rose-600 border border-rose-100'}`}
+                >
+                  {item.isActive ? <FiCheckCircle size={18} /> : <FiClock size={18} />}
+                </button>
+              </div>
+
+              <div className="flex items-center justify-between pt-5 border-t border-slate-50">
+                <button
+                  onClick={() => setSelectedComment(item)}
+                  className="flex items-center gap-2 bg-slate-50 text-slate-500 px-4 py-2 rounded-xl text-[10px] font-black hover:bg-indigo-50 hover:text-indigo-600 transition-all"
+                >
+                  <FiEye size={14} />
+                  مشاهده متن
+                </button>
+                <div className="flex items-center gap-2">
+                  <Link
+                    to={`/admin-edit-comment/${item.id}`}
+                    state={item}
+                    className="w-10 h-10 flex items-center justify-center rounded-xl bg-amber-50 text-amber-500 active:scale-90 transition-all"
+                  >
+                    <FiEdit size={18} />
+                  </Link>
+                  <button
+                    onClick={() => handleDeleteClick(item)}
+                    className="w-10 h-10 flex items-center justify-center rounded-xl bg-rose-50 text-rose-500 active:scale-90 transition-all"
+                  >
+                    <FiTrash2 size={18} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          )) : null}
+        </div>
+
+        {filteredComments.length === 0 && (
+          <div className="p-20 text-center bg-white rounded-[32px] border border-slate-100 shadow-sm">
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-200"><FiMessageSquare size={32} /></div>
+              <p className="text-slate-400 font-bold">هیچ نظری یافت نشد.</p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Comment Details Modal */}
