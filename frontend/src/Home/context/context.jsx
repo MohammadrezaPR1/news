@@ -2,6 +2,8 @@ import { createContext, useEffect, useReducer, useState } from "react";
 import { videoReducer } from "./reducers/reducerVideo";
 import { VIDEO_REQUEST, VIDEO_SUCCESS, VIDEO_FAIL } from "./constants/videoConstants";
 import axios from "axios";
+
+const API_URL = import.meta.env.VITE_API_URL || "/api";
 import { lastPostReducer } from "./reducers/reducerLastPost";
 import { LAST_POST_REQUEST, LAST_POST_SUCCESS, LAST_POST_FAIL } from "./constants/lastPostConstants";
 import { popularNewsReducer } from "./reducers/reducerPopularNews";
@@ -106,7 +108,7 @@ export const HomeContextProvider = ({ children }) => {
     const loadVideo = async () => {
         try {
             dispatch({ type: VIDEO_REQUEST });
-            const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/single-video`);
+            const { data } = await axios.get(`${API_URL}/single-video`);
             dispatch({ type: VIDEO_SUCCESS, pyload: data })
         } catch (error) {
             dispatch({ type: VIDEO_FAIL, pyload: error.response.data.message })
@@ -117,7 +119,7 @@ export const HomeContextProvider = ({ children }) => {
     const loadLastPosts = async () => {
         try {
             lsatPostDispatch({ type: LAST_POST_REQUEST });
-            const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/news/lastnews`);
+            const { data } = await axios.get(`${API_URL}/news/lastnews`);
             lsatPostDispatch({ type: LAST_POST_SUCCESS, pyload: data })
         } catch (error) {
             lsatPostDispatch({ type: LAST_POST_FAIL, pyload: error.response.data.message })
@@ -127,7 +129,7 @@ export const HomeContextProvider = ({ children }) => {
     const loadPopularNews = async () => {
         try {
             popularNewsDispatch({ type: POPULAR_NEWS_REQUEST });
-            const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/news/popular`);
+            const { data } = await axios.get(`${API_URL}/news/popular`);
             popularNewsDispatch({ type: POPULAR_NEWS_SUCCESS, pyload: data })
         } catch (error) {
             popularNewsDispatch({ type: POPULAR_NEWS_FAIL, pyload: error.response.data.message })
@@ -137,7 +139,7 @@ export const HomeContextProvider = ({ children }) => {
     const loadCategoryNews = async () => {
         try {
             categoryNewsDispatch({ type: CATEGORY_NEWS_REQUEST });
-            const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/news/cat-news${cat}`);
+            const { data } = await axios.get(`${API_URL}/news/cat-news${cat}`);
             categoryNewsDispatch({ type: CATEGORY_NEWS_SUCCESS, pyload: data })
         } catch (error) {
             categoryNewsDispatch({ type: CATEGORY_NEWS_FAIL, pyload: error.response.data.message })
@@ -147,7 +149,7 @@ export const HomeContextProvider = ({ children }) => {
     const loadMostView = async () => {
         try {
             mostViewDispatch({ type: MOST_VIEW_REQUEST });
-            const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/news/mostView`);
+            const { data } = await axios.get(`${API_URL}/news/mostView`);
             mostViewDispatch({ type: MOST_VIEW_SUCCESS, pyload: data });
         } catch (error) {
             mostViewDispatch({ type: MOST_VIEW_FAIL, pyload: error.response.data.message })
@@ -157,7 +159,7 @@ export const HomeContextProvider = ({ children }) => {
     const getRelatedNews = async (id) => {
         try {
             relatedNewsDispatch({ type: RELATED_NEWS_REQUEST });
-            const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/news/related/${id}`);
+            const { data } = await axios.get(`${API_URL}/news/related/${id}`);
             relatedNewsDispatch({ type: RELATED_NEWS_SUCCESS, pyload: data });
         } catch (error) {
             relatedNewsDispatch({ type: RELATED_NEWS_FAIL, pyload: error.response.data.message })
@@ -169,7 +171,7 @@ export const HomeContextProvider = ({ children }) => {
     // تابع دریافت دسته بندی ها 
     const loadCategory = async () => {
         try {
-            const res = await axios.get(`${import.meta.env.VITE_API_URL}/home/get-category`);
+            const res = await axios.get(`${API_URL}/home/get-category`);
             setCategories(res.data)
             console.log(res);
         } catch (error) {
@@ -179,7 +181,7 @@ export const HomeContextProvider = ({ children }) => {
 
     const loadNewsDtail = async (id) => {
         try {
-            await axios.get(`${import.meta.env.VITE_API_URL}/news/detail/${id}`);
+            await axios.get(`${API_URL}/news/detail/${id}`);
 
         } catch (error) {
             console.log(error);
@@ -188,7 +190,7 @@ export const HomeContextProvider = ({ children }) => {
 
     const createComment = async (data) => {
         try {
-            const res = await axios.post(`${import.meta.env.VITE_API_URL}/comments/create`, data);
+            const res = await axios.post(`${API_URL}/comments/create`, data);
             if (res.data.error) {
                 toast.error(res.data.error, {
                     position: "bottom-center",
@@ -224,7 +226,7 @@ export const HomeContextProvider = ({ children }) => {
 
     const getCommentsForNews = async (id) => {
         try {
-            const res = await axios.get(`${import.meta.env.VITE_API_URL}/comments/get/${id}`);
+            const res = await axios.get(`${API_URL}/comments/get/${id}`);
             setCommentsForNews(res.data)
             console.log(res.data);
         } catch (error) {
@@ -234,7 +236,7 @@ export const HomeContextProvider = ({ children }) => {
 
     const contactUsByEmail = async (data) => {
         try {
-            const res = await axios.post(`${import.meta.env.VITE_API_URL}/send-email`, data)
+            const res = await axios.post(`${API_URL}/send-email`, data)
             if (res.data.error) {
                 toast.error(res.data.error, {
                     position: "bottom-center",
@@ -271,7 +273,7 @@ export const HomeContextProvider = ({ children }) => {
 
     const getUsers = async () => {
         try {
-            const res = await axios.get(`${import.meta.env.VITE_API_URL}/get-users`);
+            const res = await axios.get(`${API_URL}/get-users`);
             setUsers(res.data);
         } catch (error) {
             console.log(error);
@@ -280,7 +282,7 @@ export const HomeContextProvider = ({ children }) => {
 
     const likeNews = async (id) => {
         try {
-            const res = await axios.put(`${import.meta.env.VITE_API_URL}/news/like/${id}`);
+            const res = await axios.put(`${API_URL}/news/like/${id}`);
             if (res.data.error) {
                 toast.error(res.data.error, {
                     position: "bottom-center",

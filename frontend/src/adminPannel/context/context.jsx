@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 
+const API_URL = import.meta.env.VITE_API_URL || "/api";
+
 
 
 const toastStyle = {
@@ -48,7 +50,7 @@ export const AdminContextProvider = ({ children }) => {
 
     const refreshToken = async () => {
         try {
-            const res = await axios.get(`${import.meta.env.VITE_API_URL}/token`);
+            const res = await axios.get(`${API_URL}/token`);
             setToken(res.data.accsessToken);
             const decoded = jwtDecode(res.data.accsessToken);
             //  مقدار دهی استیت ها 
@@ -72,7 +74,7 @@ export const AdminContextProvider = ({ children }) => {
         async (config) => {
             const currentDate = new Date();
             if (expire * 1000 < currentDate.getTime()) {
-                const response = await axios.get(`${import.meta.env.VITE_API_URL}/token`);
+                const response = await axios.get(`${API_URL}/token`);
                 config.headers.Authorization = `Bearer ${response.data.accsessToken}`;
                 setToken(response.data.accsessToken);
                 const decoded = jwtDecode(response.data.accsessToken);
@@ -96,7 +98,7 @@ export const AdminContextProvider = ({ children }) => {
     const login = async (input) => {
         try {
             // می خوایم دیتا را به سمت بک اند ارسال کنیم 
-            const res = await axios.post(`${import.meta.env.VITE_API_URL}/users/login`, input)
+            const res = await axios.post(`${API_URL}/users/login`, input)
             if (res.data.error) {
                 toast.error(res.data.error, {
                     position: "bottom-center",
@@ -136,7 +138,7 @@ export const AdminContextProvider = ({ children }) => {
 
     const getAllUsers = async () => {
         try {
-            const res = await axiosJWT.get(`${import.meta.env.VITE_API_URL}/users`, {
+            const res = await axiosJWT.get(`${API_URL}/users`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -149,7 +151,7 @@ export const AdminContextProvider = ({ children }) => {
 
     const register = async (data) => {
         try {
-            const res = await axiosJWT.post(`${import.meta.env.VITE_API_URL}/users/register`, data, {
+            const res = await axiosJWT.post(`${API_URL}/users/register`, data, {
                 headers: {
                     authorization: `Bearer ${token}`,
                 },
@@ -191,7 +193,7 @@ export const AdminContextProvider = ({ children }) => {
 
     const editUser = async (data) => {
         try {
-            const res = await axiosJWT.put(`${import.meta.env.VITE_API_URL}/users/update/${data.id}`, data, {
+            const res = await axiosJWT.put(`${API_URL}/users/update/${data.id}`, data, {
                 headers: {
                     authorization: `Bearer ${token}`
                 }
@@ -225,7 +227,7 @@ export const AdminContextProvider = ({ children }) => {
         formData.append("confPassword", data.confPassword);
         formData.append("file", data.file);
         try {
-            const res = await axiosJWT.put(`${import.meta.env.VITE_API_URL}/users/update-Profile/${data.id}`, formData, {
+            const res = await axiosJWT.put(`${API_URL}/users/update-Profile/${data.id}`, formData, {
                 headers: {
                     authorization: `Bearer ${token}`
                 }
@@ -255,7 +257,7 @@ export const AdminContextProvider = ({ children }) => {
 
     const userInfo = async () => {
         try {
-            const res = await axiosJWT.get(`${import.meta.env.VITE_API_URL}/users/profile`, {
+            const res = await axiosJWT.get(`${API_URL}/users/profile`, {
                 headers: {
                     authorization: `Bearer ${token}`
                 }
@@ -269,7 +271,7 @@ export const AdminContextProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            const res = await axiosJWT.delete(`${import.meta.env.VITE_API_URL}/users/logout`, {
+            const res = await axiosJWT.delete(`${API_URL}/users/logout`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -298,7 +300,7 @@ export const AdminContextProvider = ({ children }) => {
 
     const deleteUser = async (id) => {
         try {
-            const res = await axiosJWT.delete(`${import.meta.env.VITE_API_URL}/users/delete/${id}`, {
+            const res = await axiosJWT.delete(`${API_URL}/users/delete/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -330,7 +332,7 @@ export const AdminContextProvider = ({ children }) => {
     // تابع های مربوط یه دسته بندی 
     const getAllCategories = async () => {
         try {
-            const res = await axiosJWT.get(`${import.meta.env.VITE_API_URL}/get-category`, {
+            const res = await axiosJWT.get(`${API_URL}/get-category`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -343,7 +345,7 @@ export const AdminContextProvider = ({ children }) => {
 
     const createCategory = async (name) => {
         try {
-            const res = await axiosJWT.post(`${import.meta.env.VITE_API_URL}/create-category`, name, {
+            const res = await axiosJWT.post(`${API_URL}/create-category`, name, {
                 headers: {
                     authorization: `Bearer ${token}`
                 }
@@ -367,7 +369,7 @@ export const AdminContextProvider = ({ children }) => {
 
     const editCategory = async (data) => {
         try {
-            const res = await axiosJWT.put(`${import.meta.env.VITE_API_URL}/update-category/${data.id}`, { name: data.name }, {
+            const res = await axiosJWT.put(`${API_URL}/update-category/${data.id}`, { name: data.name }, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -391,7 +393,7 @@ export const AdminContextProvider = ({ children }) => {
 
     const deleteCategory = async (id) => {
         try {
-            const res = await axiosJWT.delete(`${import.meta.env.VITE_API_URL}/delete-category/${id}`, {
+            const res = await axiosJWT.delete(`${API_URL}/delete-category/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -439,7 +441,7 @@ export const AdminContextProvider = ({ children }) => {
 
         try {
             const res = await axiosJWT.post(
-                `${import.meta.env.VITE_API_URL}/create-news`,
+                `${API_URL}/create-news`,
                 formData,
                 {
                     headers: {
@@ -471,7 +473,7 @@ export const AdminContextProvider = ({ children }) => {
 
     const handleNews = async () => {
         try {
-            const res = await axiosJWT.get(`${import.meta.env.VITE_API_URL}/news`, {
+            const res = await axiosJWT.get(`${API_URL}/news`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -484,7 +486,7 @@ export const AdminContextProvider = ({ children }) => {
 
     const deleteNews = async (id) => {
         try {
-            const res = await axiosJWT.delete(`${import.meta.env.VITE_API_URL}/delete-news/${id}`, {
+            const res = await axiosJWT.delete(`${API_URL}/delete-news/${id}`, {
                 headers: {
                     authorization: `Bearer ${token}`
                 }
@@ -514,7 +516,7 @@ export const AdminContextProvider = ({ children }) => {
     }
     const getNewsById = async (id) => {
         try {
-            const res = await axiosJWT.get(`${import.meta.env.VITE_API_URL}/news/${id}`, {
+            const res = await axiosJWT.get(`${API_URL}/news/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -552,7 +554,7 @@ export const AdminContextProvider = ({ children }) => {
         }
 
         try {
-            const res = await axiosJWT.put(`${import.meta.env.VITE_API_URL}/update-news/${data.id}`, formData, {
+            const res = await axiosJWT.put(`${API_URL}/update-news/${data.id}`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -585,7 +587,7 @@ export const AdminContextProvider = ({ children }) => {
     // توابع مربوط به ویدیو ها 
     const getAllVideos = async () => {
         try {
-            const res = await axiosJWT.get(`${import.meta.env.VITE_API_URL}/get-video`, {
+            const res = await axiosJWT.get(`${API_URL}/get-video`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -604,7 +606,7 @@ export const AdminContextProvider = ({ children }) => {
 
         try {
             const res = await axiosJWT.post(
-                `${import.meta.env.VITE_API_URL}/create-video`,
+                `${API_URL}/create-video`,
                 formData,
                 {
                     headers: {
@@ -645,7 +647,7 @@ export const AdminContextProvider = ({ children }) => {
 
     const deleteVideo = async (id) => {
         try {
-            const res = await axiosJWT.delete(`${import.meta.env.VITE_API_URL}/delete-video/${id}`, {
+            const res = await axiosJWT.delete(`${API_URL}/delete-video/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -678,7 +680,7 @@ export const AdminContextProvider = ({ children }) => {
         formData.append("description", data.description);
         formData.append("file", data.file);
         try {
-            const res = await axiosJWT.put(`${import.meta.env.VITE_API_URL}/edit-video/${data.id}`, formData, {
+            const res = await axiosJWT.put(`${API_URL}/edit-video/${data.id}`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -708,7 +710,7 @@ export const AdminContextProvider = ({ children }) => {
     // مسیر های مربو یه کامت ها 
     const getAllComments = async () => {
         try {
-            const res = await axiosJWT.get(`${import.meta.env.VITE_API_URL}/comments`, {
+            const res = await axiosJWT.get(`${API_URL}/comments`, {
                 headers: {
                     authorization: `Bearer ${token}`
                 }
@@ -721,7 +723,7 @@ export const AdminContextProvider = ({ children }) => {
 
     const deleteComment = async (id) => {
         try {
-            const res = await axiosJWT.delete(`${import.meta.env.VITE_API_URL}/comments/delete/${id}`, {
+            const res = await axiosJWT.delete(`${API_URL}/comments/delete/${id}`, {
                 headers: {
                     authorization: `Bearer ${token}`
                 }
@@ -754,7 +756,7 @@ export const AdminContextProvider = ({ children }) => {
             isActive: true
         }
         try {
-            const res = await axiosJWT.put(`${import.meta.env.VITE_API_URL}/comments/active/${id}`, data, {
+            const res = await axiosJWT.put(`${API_URL}/comments/active/${id}`, data, {
                 headers: {
                     authorization: `Bearer ${token}`
                 }
@@ -787,7 +789,7 @@ export const AdminContextProvider = ({ children }) => {
             isActive: false
         }
         try {
-            const res = await axiosJWT.put(`${import.meta.env.VITE_API_URL}/comments/unactive/${id}`, data, {
+            const res = await axiosJWT.put(`${API_URL}/comments/unactive/${id}`, data, {
                 headers: {
                     authorization: `Bearer ${token}`
                 }
