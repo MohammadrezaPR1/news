@@ -2,7 +2,7 @@
   "name": "news-website-root",
   "version": "1.0.0",
   "scripts": {
-    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "install-all": "npm install && cd backend && npm install --include=dev && cd ../frontend && npm install --include=dev",
     "build-all": "npm run install-all && cd frontend && npm run build"
   }
 }
