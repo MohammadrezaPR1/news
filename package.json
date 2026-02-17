@@ -1,0 +1,8 @@
+{
+  "name": "news-website-root",
+  "version": "1.0.0",
+  "scripts": {
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "build-all": "npm run install-all && cd frontend && npm run build"
+  }
+}
