@@ -29,7 +29,7 @@ const connectDB = async () => {
 const allowedOrigins = [
     process.env.FRONTEND_URL,
     "http://localhost:5173",
-    "https://mediana1.netlify.app"
+    "https://fabulous-dragon-21e7fa.netlify.app"
 ].filter(Boolean);
 
 app.use(cors({
