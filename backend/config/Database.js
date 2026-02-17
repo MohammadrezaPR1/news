@@ -13,8 +13,10 @@ const db = new Sequelize(process.env.DATABASE_URL, {
         },
         keepAlive: true
     },
+    // Required for some connection poolers (like Supavisor Transaction Mode)
+    minifyAliases: true,
     pool: {
-        max: 5,
+        max: 3, // Reduced for serverless to prevent hitting limits
         min: 0,
         acquire: 30000,
         idle: 10000
