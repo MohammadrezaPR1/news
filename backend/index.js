@@ -26,9 +26,22 @@ const connectDB = async () => {
     }
 }
 
+const allowedOrigins = [
+    process.env.FRONTEND_URL,
+    "http://localhost:5173",
+    "https://mediana1.netlify.app"
+].filter(Boolean);
+
 app.use(cors({
     credentials: true,
-    origin: process.env.FRONTEND_URL || "http://localhost:5173"
+    origin: function (origin, callback) {
+        // allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            return callback(new Error('The CORS policy for this site does not allow access from the specified Origin.'), false);
+        }
+        return callback(null, true);
+    }
 }));
 app.use(express.json());
 app.use(fileUpload());
@@ -42,6 +55,15 @@ app.use("/.netlify/functions/index", videoRoutes);
 app.use("/.netlify/functions/index", newsRoutes);
 app.use("/.netlify/functions/index", commentRoutes);
 app.use("/.netlify/functions/index", sendEmailRoutes);
+
+// Root routes for testing
+app.get("/.netlify/functions/index", (req, res) => {
+    res.json({ message: "API is running successfully on Netlify!" });
+});
+
+app.get("/", (req, res) => {
+    res.json({ message: "Backend Root is working!" });
+});
 
 // For local development
 if (process.env.NODE_ENV !== "production") {
