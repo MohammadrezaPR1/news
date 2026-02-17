@@ -18,11 +18,11 @@ const app = express();
 
 const connectDB = async () => {
     try {
+        // Authenticate is faster than sync and sufficient for checking connection
         await db.authenticate();
-        console.log("Database connected !");
-        await db.sync({ alter: true });
+        console.log("Database connected successfully.");
     } catch (error) {
-        console.error("Critical Database Error Details:", error);
+        console.error("Database Connection Error:", error.message);
     }
 }
 
