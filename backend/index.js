@@ -48,22 +48,23 @@ app.use(fileUpload());
 app.use(express.static("public"));
 app.use(cookieParser());
 
-// Prefix routes for Netlify Functions if needed, e.g., /.netlify/functions/index
-app.use("/.netlify/functions/index", userRoutes);
-app.use("/.netlify/functions/index", categoryRoutes);
-app.use("/.netlify/functions/index", videoRoutes);
-app.use("/.netlify/functions/index", newsRoutes);
-app.use("/.netlify/functions/index", commentRoutes);
-app.use("/.netlify/functions/index", sendEmailRoutes);
+// Consolidated Router
+const mainRouter = express.Router();
+mainRouter.use(userRoutes);
+mainRouter.use(categoryRoutes);
+mainRouter.use(videoRoutes);
+mainRouter.use(newsRoutes);
+mainRouter.use(commentRoutes);
+mainRouter.use(sendEmailRoutes);
 
-// Root routes for testing
-app.get("/.netlify/functions/index", (req, res) => {
-    res.json({ message: "API is running successfully on Netlify!" });
+// Health check on the router itself
+mainRouter.get("/", (req, res) => {
+    res.json({ message: "API Router is active!" });
 });
 
-app.get("/", (req, res) => {
-    res.json({ message: "Backend Root is working!" });
-});
+// Mount at both root and Netlify path for maximum compatibility
+app.use("/.netlify/functions/index", mainRouter);
+app.use("/", mainRouter);
 
 // For local development
 if (process.env.NODE_ENV !== "production") {
