@@ -27,20 +27,23 @@ const connectDB = async () => {
 }
 
 const allowedOrigins = [
-    process.env.FRONTEND_URL,
+    "https://fabulous-dragon-21e7fa.netlify.app",
+    "http://fabulous-dragon-21e7fa.netlify.app",
+    "https://mediana1.netlify.app",
     "http://localhost:5173",
-    "https://fabulous-dragon-21e7fa.netlify.app"
+    process.env.FRONTEND_URL
 ].filter(Boolean);
 
 app.use(cors({
     credentials: true,
     origin: function (origin, callback) {
-        // allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) === -1) {
-            return callback(new Error('The CORS policy for this site does not allow access from the specified Origin.'), false);
+        // Allow if origin is in our list OR if it's the same domain
+        if (!origin || allowedOrigins.includes(origin) || origin.includes("netlify.app")) {
+            callback(null, true);
+        } else {
+            console.warn(`Blocked origin: ${origin}`);
+            callback(new Error('Not allowed by CORS'));
         }
-        return callback(null, true);
     }
 }));
 app.use(express.json());
@@ -59,12 +62,28 @@ mainRouter.use(sendEmailRoutes);
 
 // Health check on the router itself
 mainRouter.get("/", (req, res) => {
-    res.json({ message: "API Router is active!" });
+    res.json({
+        message: "API Router is active!",
+        timestamp: new Date().toISOString(),
+        env: process.env.NODE_ENV
+    });
 });
 
-// Mount at both root and Netlify path for maximum compatibility
+// Final mounting strategy
+app.use("/api", mainRouter);
 app.use("/.netlify/functions/index", mainRouter);
 app.use("/", mainRouter);
+
+// Catch-all for 404s with detail for debugging
+app.use((req, res) => {
+    res.status(404).json({
+        error: "Not Found",
+        path: req.originalUrl,
+        proxyPath: req.url,
+        method: req.method,
+        help: "If you see this, the request reached the backend but no route matched."
+    });
+});
 
 // For local development
 if (process.env.NODE_ENV !== "production") {
